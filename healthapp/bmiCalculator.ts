@@ -24,3 +24,5 @@ const calculateBmi = (h: number, w: number) => {
 
 
 console.log(calculateBmi(152, 56))
+
+console.log(process.argv)
