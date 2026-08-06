@@ -49,6 +49,8 @@ const calculateBmi = (h: number, w: number) => {
 // const weight: number = Number(process.argv[3])
 
 try {
+
+    //console.log(process.argv)
     const { height, weight } = parseArguments(process.argv)
 
     console.log(calculateBmi(height, weight));

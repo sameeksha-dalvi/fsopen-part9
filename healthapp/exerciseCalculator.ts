@@ -8,11 +8,39 @@ interface ExerciseResult {
     average: number;
 }
 
+interface InputValuesExercise {
+    targetVal: number;
+    dailyHrs: number[];
+}
+
+const parseArgumentsExercise = (args: string[]): InputValuesExercise => {
+
+    console.log("args.length", args.length)
+    if (args.length < 12) throw new Error('Not enough arguments')
+    if (args.length > 12) throw new Error('Too many arguments')
+
+    if (!isNaN(Number(args[2]))
+        && !isNaN(Number(args[3]))
+        && !isNaN(Number(args[4]))
+        && !isNaN(Number(args[5]))
+        && !isNaN(Number(args[6]))
+        && !isNaN(Number(args[7]))
+        && !isNaN(Number(args[8]))
+        && !isNaN(Number(args[9]))
+    ){
+        return{
+            targetVal:Number(args[2]),
+            dailyHrs: args.slice(3).map(hr => Number(hr))
+        }
+    }else{
+        throw new Error('provided values were not numbers!')
+    }
+}
 
 const calculateExercises = (dailyExerciseHrs: number[], targetExerciseHrs: number): ExerciseResult => {
 
     const periodLengthVal = dailyExerciseHrs.length;
-    
+
     //calulate trainingDays
     let trainingDaysVal = 0;
     let totalHrs = 0;
@@ -32,7 +60,7 @@ const calculateExercises = (dailyExerciseHrs: number[], targetExerciseHrs: numbe
 
     //calulate success
     const successVal = averageVal >= targetExerciseHrs;
-    
+
     //calulate rating
 
     let rating = 1;
@@ -56,7 +84,17 @@ const calculateExercises = (dailyExerciseHrs: number[], targetExerciseHrs: numbe
     }
 }
 
-const { periodLength, trainingDays, success, rating, ratingDescription, target, average } = calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
+//console.log(process.argv.slice(3))
+
+const { targetVal, dailyHrs} =  parseArgumentsExercise(process.argv)
+
+//console.log("target ",targetVal)
+console.log("dailyHrs ",dailyHrs) 
+//calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
+
+//const { periodLength, trainingDays, success, rating, ratingDescription, target, average } = calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
+
+const { periodLength, trainingDays, success, rating, ratingDescription, target, average } = calculateExercises(dailyHrs, targetVal)
 
 console.log("periodLength: ", periodLength)
 console.log("trainingDays: ", trainingDays)
