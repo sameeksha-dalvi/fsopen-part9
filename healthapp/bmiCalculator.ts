@@ -20,7 +20,7 @@ const parseArguments = (args: string[]): InputValues => {
 
 }
 
-const calculateBmi = (h: number, w: number) => {
+export const calculateBmi = (h: number, w: number) => {
     const hInMeters = h / 100;
     const bmi = w / (hInMeters * hInMeters);
     //console.log("BMI :", bmi);
@@ -47,18 +47,20 @@ const calculateBmi = (h: number, w: number) => {
 
 // const height: number = Number(process.argv[2])
 // const weight: number = Number(process.argv[3])
+if (process.argv[1] === import.meta.filename) {// do not run this code if module is imported
+    try {
 
-try {
+        //console.log(process.argv)
+        const { height, weight } = parseArguments(process.argv)
 
-    //console.log(process.argv)
-    const { height, weight } = parseArguments(process.argv)
-
-    console.log(calculateBmi(height, weight));
-} catch (error: unknown) {
-    let errorMsg = 'Something went wrong.';
-    if (error instanceof Error) {
-        errorMsg+= ' Error : ' + error.message;
+        console.log(calculateBmi(height, weight));
+    } catch (error: unknown) {
+        let errorMsg = 'Something went wrong.';
+        if (error instanceof Error) {
+            errorMsg += ' Error : ' + error.message;
+        }
+        console.log(errorMsg)
     }
-    console.log(errorMsg)
 }
+
 
