@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/hello', (_req, res) => {
-    res.send('Hello Full Stack!!');
+    res.send('Hello Full Stack!');
 });
 
 app.get('/bmi', (req, res) => {
@@ -18,19 +18,17 @@ app.get('/bmi', (req, res) => {
     if (
         !req.query.height ||
         !req.query.weight ||
-        height <= 0 ||
-        weight <= 0
+        !Number.isFinite(height) ||
+        !Number.isFinite(weight)
     ) {
-        res.status(400).json({
+        return res.status(400).json({
             error: 'malformatted parameters'
         });
-        return;
     }
-
     const result = calculateBmi(height, weight);
     res.json({
-        height: req.query.height,
-        weight: req.query.weight,
+        height: height,
+        weight: weight,
         bmi: result
     });
 });
@@ -58,7 +56,7 @@ app.post('/exercises', (req, res) => {
     res.json(result);
 });
 
-const PORT = 3003;
+const PORT = 3000;
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
