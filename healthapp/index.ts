@@ -36,7 +36,7 @@ app.get('/bmi', (req, res) => {
 
 app.post('/exercises', (req, res) => {
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { daily_exercises, target } = req.body;
 
     if (daily_exercises === undefined || target === undefined) {
@@ -47,10 +47,12 @@ app.post('/exercises', (req, res) => {
         return res.status(400).json({ error: 'malformatted parameters' });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     if (!daily_exercises.every((n: number) => typeof n === 'number')) {
         return res.status(400).json({ error: 'malformatted parameters' });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const result = calculateExercises(daily_exercises, target);
 
     res.json(result);
