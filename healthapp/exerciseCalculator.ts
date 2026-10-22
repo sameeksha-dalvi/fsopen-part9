@@ -28,7 +28,7 @@ const parseArgumentsExercise = (args: string[]): InputValuesExercise => {
     }
 };
 
-const calculateExercises = (dailyExerciseHrs: number[], targetExerciseHrs: number): ExerciseResult => {
+export const calculateExercises = (dailyExerciseHrs: number[], targetExerciseHrs: number): ExerciseResult => {
 
     const periodLengthVal = dailyExerciseHrs.length;
 
@@ -74,31 +74,33 @@ const calculateExercises = (dailyExerciseHrs: number[], targetExerciseHrs: numbe
         average: averageVal
     };
 };
+if (process.argv[1] === import.meta.filename) {
+    //console.log(process.argv.slice(3))
+    try {
+        const { targetVal, dailyHrs } = parseArgumentsExercise(process.argv);
 
-//console.log(process.argv.slice(3))
-try {
-    const { targetVal, dailyHrs } = parseArgumentsExercise(process.argv);
+        //console.log("target ",targetVal)
+        console.log("dailyHrs ", dailyHrs);
+        //calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
 
-    //console.log("target ",targetVal)
-    console.log("dailyHrs ", dailyHrs);
-    //calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
+        //const { periodLength, trainingDays, success, rating, ratingDescription, target, average } = calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
 
-    //const { periodLength, trainingDays, success, rating, ratingDescription, target, average } = calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
+        const { periodLength, trainingDays, success, rating, ratingDescription, target, average } = calculateExercises(dailyHrs, targetVal);
 
-    const { periodLength, trainingDays, success, rating, ratingDescription, target, average } = calculateExercises(dailyHrs, targetVal);
-
-    console.log("periodLength: ", periodLength);
-    console.log("trainingDays: ", trainingDays);
-    console.log("success: ", success);
-    console.log("rating: ", rating);
-    console.log("ratingDescription: ", ratingDescription);
-    console.log("target: ", target);
-    console.log("average: ", average);
-} catch (error: unknown) {
-    let errorMsg = 'Something went wrong.';
-    if (error instanceof Error) {
-        errorMsg += ' Error : ' + error.message;
+        console.log("periodLength: ", periodLength);
+        console.log("trainingDays: ", trainingDays);
+        console.log("success: ", success);
+        console.log("rating: ", rating);
+        console.log("ratingDescription: ", ratingDescription);
+        console.log("target: ", target);
+        console.log("average: ", average);
+    } catch (error: unknown) {
+        let errorMsg = 'Something went wrong.';
+        if (error instanceof Error) {
+            errorMsg += ' Error : ' + error.message;
+        }
+        console.log(errorMsg);
     }
-    console.log(errorMsg);
 }
+
 
