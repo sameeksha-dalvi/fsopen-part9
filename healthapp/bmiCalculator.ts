@@ -7,18 +7,18 @@ interface InputValues {
 const parseArguments = (args: string[]): InputValues => {
 
     if (args.length < 4) throw new Error('Not enough arguments');
-    if (args.length > 4) throw new Error('Too many arguments')
+    if (args.length > 4) throw new Error('Too many arguments');
 
     if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
         return {
             height: Number(args[2]),
             weight: Number(args[3])
-        }
+        };
     } else {
         throw new Error('Provided values are not numbers');
     }
 
-}
+};
 
 export const calculateBmi = (h: number, w: number) => {
     const hInMeters = h / 100;
@@ -42,7 +42,7 @@ export const calculateBmi = (h: number, w: number) => {
     } else {
         return "Underweight (Severe thinness)";
     }
-}
+};
 
 
 // const height: number = Number(process.argv[2])
@@ -51,7 +51,7 @@ if (process.argv[1] === import.meta.filename) {// do not run this code if module
     try {
 
         //console.log(process.argv)
-        const { height, weight } = parseArguments(process.argv)
+        const { height, weight } = parseArguments(process.argv);
 
         console.log(calculateBmi(height, weight));
     } catch (error: unknown) {
@@ -59,7 +59,7 @@ if (process.argv[1] === import.meta.filename) {// do not run this code if module
         if (error instanceof Error) {
             errorMsg += ' Error : ' + error.message;
         }
-        console.log(errorMsg)
+        console.log(errorMsg);
     }
 }
 

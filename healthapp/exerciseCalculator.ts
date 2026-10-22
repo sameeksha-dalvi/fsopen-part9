@@ -15,18 +15,18 @@ interface InputValuesExercise {
 
 const parseArgumentsExercise = (args: string[]): InputValuesExercise => {
 
-    console.log("args.length", args.length)
-    if (args.length < 5) throw new Error('Not enough arguments')
+    console.log("args.length", args.length);
+    if (args.length < 5) throw new Error('Not enough arguments');
 
     if (args.slice(2).every(arg => !isNaN(Number(arg)))) {
         return {
             targetVal: Number(args[2]),
             dailyHrs: args.slice(3).map(hr => Number(hr))
-        }
+        };
     } else {
-        throw new Error('provided values were not numbers!')
+        throw new Error('provided values were not numbers!');
     }
-}
+};
 
 const calculateExercises = (dailyExerciseHrs: number[], targetExerciseHrs: number): ExerciseResult => {
 
@@ -61,7 +61,7 @@ const calculateExercises = (dailyExerciseHrs: number[], targetExerciseHrs: numbe
         ratingDescription = "great keep going";
     } else if (averageVal >= targetExerciseHrs - 1) {
         rating = 2;
-        ratingDescription = "not too bad but could be better"
+        ratingDescription = "not too bad but could be better";
     }
 
     return {
@@ -72,33 +72,33 @@ const calculateExercises = (dailyExerciseHrs: number[], targetExerciseHrs: numbe
         ratingDescription: ratingDescription,
         target: targetExerciseHrs,
         average: averageVal
-    }
-}
+    };
+};
 
 //console.log(process.argv.slice(3))
 try {
-    const { targetVal, dailyHrs } = parseArgumentsExercise(process.argv)
+    const { targetVal, dailyHrs } = parseArgumentsExercise(process.argv);
 
     //console.log("target ",targetVal)
-    console.log("dailyHrs ", dailyHrs)
+    console.log("dailyHrs ", dailyHrs);
     //calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
 
     //const { periodLength, trainingDays, success, rating, ratingDescription, target, average } = calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
 
-    const { periodLength, trainingDays, success, rating, ratingDescription, target, average } = calculateExercises(dailyHrs, targetVal)
+    const { periodLength, trainingDays, success, rating, ratingDescription, target, average } = calculateExercises(dailyHrs, targetVal);
 
-    console.log("periodLength: ", periodLength)
-    console.log("trainingDays: ", trainingDays)
-    console.log("success: ", success)
-    console.log("rating: ", rating)
-    console.log("ratingDescription: ", ratingDescription)
-    console.log("target: ", target)
-    console.log("average: ", average)
+    console.log("periodLength: ", periodLength);
+    console.log("trainingDays: ", trainingDays);
+    console.log("success: ", success);
+    console.log("rating: ", rating);
+    console.log("ratingDescription: ", ratingDescription);
+    console.log("target: ", target);
+    console.log("average: ", average);
 } catch (error: unknown) {
     let errorMsg = 'Something went wrong.';
     if (error instanceof Error) {
         errorMsg += ' Error : ' + error.message;
     }
-    console.log(errorMsg)
+    console.log(errorMsg);
 }
 
