@@ -3,17 +3,57 @@ interface HeaderProps {
 };
 
 interface PartProps {
-  name: string;
-  exerciseCount: number;
+  part: CoursePart;
 };
 
 interface ContentProps {
-  parts: PartProps[];
+  parts: CoursePart[];
 }
 
 interface TotalProps {
   total: number;
 };
+
+interface CoursePartBase {
+  name: string;
+  exerciseCount: number;
+}
+
+interface CoursePartDesc extends CoursePartBase {
+  description: string;
+}
+
+interface CoursePartBasic extends CoursePartDesc {
+  kind: "basic"
+}
+
+interface CoursePartGroup extends CoursePartBase {
+  groupProjectCount: number;
+  kind: "group"
+}
+
+interface CoursePartBackground extends CoursePartDesc {
+  backgroundMaterial: string;
+  kind: "background"
+}
+
+interface CoursePartSpecial extends CoursePartDesc {
+  requirements: string[];
+  kind: "special";
+}
+
+type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground | CoursePartSpecial;
+
+/**
+ * Helper function for exhaustive type checking
+ */
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
+
+
 
 const Header = (props: HeaderProps) => {
   return (
@@ -24,24 +64,62 @@ const Header = (props: HeaderProps) => {
 };
 
 const Part = (props: PartProps) => {
-  return (
-    <>
-      <p>
-        {props.name} {props.exerciseCount}
-      </p>
-    </>
-  )
+  const part = props.part;
+
+  switch (part.kind) {
+    case "basic":
+      return (
+        <>
+          <h3>{part.name} {part.exerciseCount}</h3>
+          <p>{part.description}</p>
+        </>
+      );
+
+    case "group":
+      return (
+        <>
+          <h3>{part.name} {part.exerciseCount}</h3>
+          <p>Group projects: {part.groupProjectCount}</p>
+        </>
+      );
+
+    case "background":
+      return (
+        <>
+          <h3>{part.name} {part.exerciseCount}</h3>
+          <p>{part.description}</p>
+          <p>{part.backgroundMaterial}</p>
+        </>
+      );
+
+    case "special":
+      return (
+        <>
+          <h3>{part.name} {part.exerciseCount}</h3>
+          <p>{part.description}</p>
+          <p>Requirements:</p>
+          <ul>
+            {part.requirements.map(requirement => (
+              <li key={requirement}>{requirement}</li>
+            ))}
+          </ul>
+        </>
+      );
+
+    default: {
+      return assertNever(part);
+    }
+  }
 };
 
 const Content = (props: ContentProps) => {
-  //console.log("Content props:",props.parts[0].name);
   return (
     <>
-      <Part name={props.parts[0].name} exerciseCount={props.parts[0].exerciseCount} />
-      <Part name={props.parts[1].name} exerciseCount={props.parts[1].exerciseCount} />
-      <Part name={props.parts[2].name} exerciseCount={props.parts[2].exerciseCount} />
+      {props.parts.map((part) => (
+        <Part key={part.name} part={part} />
+      ))}
     </>
-  )
+  );
 };
 
 const Total = (props: TotalProps) => {
@@ -59,19 +137,46 @@ const App = () => {
 
 
   const courseName = "Half Stack application development";
-  const courseParts = [
+
+  const courseParts: CoursePart[] = [
     {
       name: "Fundamentals",
-      exerciseCount: 10
+      exerciseCount: 10,
+      description: "This is an awesome course part",
+      kind: "basic"
     },
     {
       name: "Using props to pass data",
-      exerciseCount: 7
+      exerciseCount: 7,
+      groupProjectCount: 3,
+      kind: "group"
+    },
+    {
+      name: "Basics of type Narrowing",
+      exerciseCount: 7,
+      description: "How to go from unknown to string",
+      kind: "basic"
     },
     {
       name: "Deeper type usage",
-      exerciseCount: 14
-    }
+      exerciseCount: 14,
+      description: "Confusing description",
+      backgroundMaterial: "https://type-level-typescript.com/template-literal-types",
+      kind: "background"
+    },
+    {
+      name: "TypeScript in frontend",
+      exerciseCount: 10,
+      description: "a hard part",
+      kind: "basic",
+    },
+    {
+      name: "Backend development",
+      exerciseCount: 21,
+      description: "Typing the backend",
+      requirements: ["nodejs", "jest"],
+      kind: "special"
+    },
   ];
 
   const totalExercises = courseParts.reduce((sum, part) => sum + part.exerciseCount, 0);
